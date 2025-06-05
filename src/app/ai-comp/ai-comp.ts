@@ -7,8 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './ai-comp.css'
 })
 export class AiComp {
-constructor() {
-  // Initialization logic can go here
-  console.log('AI Component Initialized');
-}
+isChatVisible = false;
+
+  toggleChat(): void {
+    console.log('Toggling chat visibility');
+    this.isChatVisible = !this.isChatVisible;
+  }
 }
