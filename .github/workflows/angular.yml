@@ -37,4 +37,6 @@ jobs:
 
     - name: Deploy to GitHub Pages
       run: |
-        npx angular-cli-ghpages --dir=dist/comp_ai/browser --no-silent --repo=https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          npx angular-cli-ghpages --dir=dist/comp_ai/browser --no-silent
+      env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
