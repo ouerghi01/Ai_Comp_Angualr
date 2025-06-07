@@ -30,6 +30,8 @@ jobs:
 
     - name: Build Angular app
       run: npm run build 
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
     - name: Build Angular app
       run: ng build --configuration production --base-href=/Ai_Comp_Angualr/
 
