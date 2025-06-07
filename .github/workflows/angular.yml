@@ -34,14 +34,5 @@ jobs:
       run: ng build --configuration production --base-href=/Ai_Comp_Angualr/
 
     - name: Deploy to GitHub Pages
-      uses: angular-schule/angular-cli-ghpages@v1
-      with:
-        baseHref: /Ai_Comp_Angualr/
-        buildDir: dist/comp_ai/browser
-      env:
-          NG_CLI_ANALYTICS: false
-          GIT_AUTHOR_NAME: github-actions
-          GIT_AUTHOR_EMAIL: actions@github.com
-          GIT_COMMITTER_NAME: github-actions
-          GIT_COMMITTER_EMAIL: actions@github.com
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        npx angular-cli-ghpages --dir=dist/comp_ai/browser --no-silent --repo=https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
