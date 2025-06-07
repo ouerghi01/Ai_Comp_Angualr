@@ -1,51 +1,50 @@
-// src/app/chat.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, from, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { GoogleGenAI } from "@google/genai";
 import { environment } from '../../environments/environment';
 
-export interface UserMessage {
-  text: string;
-}
+const genAI = new GoogleGenAI({ apiKey: environment.GOOGLE_GENAI_API_KEY });
 
 export interface AiResponse {
   response: string;
 }
 
 @Injectable({
-  providedIn: 'root' 
+  providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = environment.apiUrl // Ensure this URL is set in your environment
+  private apiUrl = `${environment.BACKEND_URL}`; // Adjust the URL as needed
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  /**
-   * Sends a user message to the backend and receives an AI response.
-   * @param message The user's message text.
-   * @returns An Observable of the AI response.
-   */
   sendMessage(message: string): Observable<AiResponse> {
     const userMessage = { question: message };
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     return this.http.post<AiResponse>(this.apiUrl, userMessage, { headers }).pipe(
-      map(response => response),
-      catchError(this.handleError)
+      catchError(err => {
+        console.warn('Backend failed, falling back to Gemini...', err);
+        return this.fallbackToGemini(message);
+      })
     );
   }
 
-  private handleError(error: any): Observable<never> {
-    console.error('An error occurred in ChatService:', error);
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(() => new Error(errorMessage));
+  private fallbackToGemini(message: string): Observable<AiResponse> {
+    return from(
+      genAI.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: message,  // use actual message here
+      })
+    ).pipe(
+      map(response => ({
+        response: response.text ?? "Sorry, I couldn't generate a response."
+      })),
+      catchError(err => {
+        console.error('Gemini fallback failed:', err);
+        return throwError(() => new Error('Both backend and Gemini failed'));
+      })
+    );
   }
 }
