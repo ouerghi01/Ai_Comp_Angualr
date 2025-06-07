@@ -1,6 +1,6 @@
 
 export default {
-  basePath: 'https://github.com/ouerghi01/Ai_Comp_Angualr',
+  basePath: '/',
   supportedLocales: {
   "en-US": ""
 },
