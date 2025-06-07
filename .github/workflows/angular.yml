@@ -36,7 +36,8 @@ jobs:
       run: ng build --configuration production --base-href=/Ai_Comp_Angualr/
 
     - name: Deploy to GitHub Pages
-      run: |
-          npx angular-cli-ghpages --dir=dist/comp_ai/browser --no-silent
-      env:
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: dist/comp_ai/browser
