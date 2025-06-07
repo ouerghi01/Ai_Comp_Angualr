@@ -28,3 +28,11 @@ jobs:
 
     - name: Build Angular app
       run: npm run build 
+    - name: Build Angular app
+      run: ng build --configuration production --base-href=/Ai_Comp_Angualr/
+
+    - name: Deploy to GitHub Pages
+      uses: angular-schule/angular-cli-ghpages@v1
+      with:
+        baseHref: /Ai_Comp_Angualr/
+        buildDir: dist/comp_ai/browser
