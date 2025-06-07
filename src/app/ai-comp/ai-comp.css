@@ -144,7 +144,6 @@
   gap: 10px;
 }
 
-/* Optional: Scrollbar styling (from previous code) */
 .ai-comp-main::-webkit-scrollbar {
   width: 8px;
 }
@@ -163,30 +162,26 @@
   background: #888;
 }
 
-/* --- Individual Message Container (The Bubble) --- */
 .ai-comp-message {
-  display: flex; /* Use flexbox for icon and message content alignment */
-  align-items: flex-start; /* Align items to the top (icon and text) */
-  max-width: 85%; /* Adjust max-width as needed to accommodate icon */
+  display: flex; 
+  align-items: flex-start; 
+  max-width: 85%; 
   word-wrap: break-word;
   white-space: pre-wrap;
-  /* Basic shadow for the whole message block (icon + bubble) */
   
-  padding: 5px; /* Add some padding around the icon and message content */
+  padding: 5px; 
 }
 
-/* Style for the icon next to the message */
 .ai-message-icon {
-  font-size: 24px; /* Adjust icon size */
-  min-width: 24px; /* Ensure icon takes up consistent space */
-  min-height: 24px; /* Ensure icon takes up consistent space */
+  font-size: 24px; 
+  min-width: 24px; 
+  min-height: 24px; 
   display: flex;
   align-items: center;
   justify-content: center;
-    width: fit-content; /* Adjust width to fit content */
+    width: fit-content; 
 
-  border-radius: 50%; /* Make icon background circular if desired */
-  /* Remove background/color here, set it in specific user/AI sides */
+  border-radius: 50%; 
 }
 
 /* Content inside the message bubble */
