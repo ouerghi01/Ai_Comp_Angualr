@@ -1,16 +1,50 @@
-<!-- Floating AI Button -->
 <div class="ai-fab" (click)="toggleChat()">
-  💬
+  <i class="fas fa-robot"></i>
 </div>
 
-<!-- Chat Component -->
 <div class="ai-comp" [class.hidden]="!isChatVisible">
-  <header class="ai-comp-header">AI</header>
-  <main class="ai-comp-main">
-    <!-- AI messages go here -->
-  </main>
+  <header class="ai-comp-header">
+    <i class="fas fa-brain"></i>
+      
+
+    <span class="header-title">AI Assistant</span> <span class="close" (click)="toggleChat()"  >
+      <i class="fas fa-times"></i>
+    </span>
+  </header>
+ <main class="ai-comp-main">
+  <div class="ai-comp-messages" *ngIf="hydrated">
+    <div
+      *ngFor="let msg of messages"
+      class="ai-comp-message"
+      [ngClass]="{
+        'ai-comp-message-user-side': msg.sender === 'User',
+        'ai-comp-message-ai-side': msg.sender === 'AI'
+      }"
+    >
+      <i *ngIf="msg.sender === 'AI'" class="fas fa-robot ai-message-icon"></i>
+        
+      <div class="message-content">
+        <span *ngIf="msg.sender === 'AI'" class="ai-comp-message-text" [innerHTML]="msg.text">
+          <!-- Loading spinner when waiting for AI response -->
+        </span>
+        <span *ngIf="msg.sender === 'User'" class="ai-comp-message-text">{{ msg.text }}</span>
+      </div>
+     <i *ngIf="msg.sender === 'User'" class="fas fa-circle-user ai-message-icon"></i>
+    </div>
+    <div *ngIf="user_sended" class=".ai-comp-message-ai-side">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+  </div>
+</main>
+
   <footer class="ai-comp-footer">
-    <input type="text" placeholder="Type your message here..." />
-    <button>Send</button>
+    <input
+      type="text"
+      placeholder="Type your message here..."
+      [(ngModel)]="message"
+      (keydown.enter)="sendMessage()" />
+    <button (click)="sendMessage()" [disabled]="!message.trim()">
+      <i class="fas fa-paper-plane"></i>
+    </button>
   </footer>
 </div>

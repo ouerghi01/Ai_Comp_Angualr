@@ -1,89 +1,328 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+/* --- Floating AI Button --- */
 .ai-fab {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff;
-  color: white;
-  font-size: 24px;
+  background-color: rgb(255, 255, 255);
+  color: #003A40; /* A dark teal/blue for the icon */
+  font-family: 'Poppins', sans-serif;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  width: 56px;
-  height: 56px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  align-items: center;
   cursor: pointer;
+  border: 1px solid #e0e0e0;
   z-index: 1000;
+  box-shadow: 0 0 5px rgba(0, 58, 64, 0.2); /* Adjusted shadow color to match icon */
 }
 
+.ai-fab i {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.ai-fab::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0);
+  animation: pulseOuterGlow 2s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: -1;
+}
+
+@keyframes pulseOuterGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 58, 64, 0.3); /* Adjusted pulse color to match icon/header */
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 58, 64, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 58, 64, 0);
+  }
+}
+
+/* --- Main Chat Component Container --- */
 .ai-comp {
   font-family: 'Poppins', sans-serif;
   position: fixed;
   bottom: 90px;
   right: 20px;
-  width: 310px;
-  height: 400px;
+  width: 330px; /* Slightly wider for better message readability */
+  height: 450px; /* Slightly taller */
   background-color: #ffffff;
   border: 1px solid #dee2e6;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px; /* More rounded corners for the overall chat box */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More prominent shadow */
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease-out; /* Smoother transition */
   z-index: 1000;
 }
+.spinner-dots span {
+  font-size: 1.5rem;
+  opacity: 0;
+  animation: blink 1.5s infinite;
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.spinner-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+.spinner-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.spinner-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+}
+
+
+
+
 
 .ai-comp.hidden {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(30px) scale(0.95); /* Better hide animation */
   pointer-events: none;
 }
 
+/* --- Chat Header --- */
 .ai-comp-header {
-  background-color: #007bff;
-  color: white;
-  height: 50px;
+  background-color: #003A40;
+  color: #ffffff;
+  height: 56px; /* Slightly taller header */
   display: flex;
   align-items: center;
   padding: 0 16px;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 18px; /* Larger header font */
+  font-weight: 600; /* Bolder header font */
+  gap: 10px;
+  border-bottom: 1px solid #002b30; /* Darker border */
+  border-top-left-radius: 11px; /* Match container border-radius */
+  border-top-right-radius: 11px; /* Match container border-radius */
 }
 
+.ai-comp-header .header-title {
+  flex-grow: 1; /* Pushes close button to the right */
+}
+
+.ai-comp-header .close {
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 20px; /* Larger close icon */
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.ai-comp-header .close:hover {
+  opacity: 1;
+}
+
+/* --- Main Chat Component Container (from previous code) --- */
 .ai-comp-main {
   flex: 1;
-  padding: 12px;
+  padding: 10px;
   overflow-y: auto;
-  background-color: #f8f9fa;
+  background-color: #f0f2f5;
+  display: flex; /* Keep as flex container */
+  flex-direction: column;
+  gap: 10px;
 }
 
+/* Optional: Scrollbar styling (from previous code) */
+.ai-comp-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ai-comp-main::-webkit-scrollbar-track {
+  background: #f0f2f5;
+  border-radius: 10px;
+}
+
+.ai-comp-main::-webkit-scrollbar-thumb {
+  background: #a8a8a8;
+  border-radius: 10px;
+}
+
+.ai-comp-main::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* --- Individual Message Container (The Bubble) --- */
+.ai-comp-message {
+  display: flex; /* Use flexbox for icon and message content alignment */
+  align-items: flex-start; /* Align items to the top (icon and text) */
+  max-width: 85%; /* Adjust max-width as needed to accommodate icon */
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  /* Basic shadow for the whole message block (icon + bubble) */
+  
+  padding: 5px; /* Add some padding around the icon and message content */
+}
+
+/* Style for the icon next to the message */
+.ai-message-icon {
+  font-size: 24px; /* Adjust icon size */
+  min-width: 24px; /* Ensure icon takes up consistent space */
+  min-height: 24px; /* Ensure icon takes up consistent space */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    width: fit-content; /* Adjust width to fit content */
+
+  border-radius: 50%; /* Make icon background circular if desired */
+  /* Remove background/color here, set it in specific user/AI sides */
+}
+
+/* Content inside the message bubble */
+.message-content {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px; /* Padding inside the actual text bubble */
+  line-height: 1.4;
+  border-radius: 12px; /* Rounded corners for the text bubble itself */
+  flex-grow: 1; /* Allow content to grow */
+  width: fit-content; /* Adjust width to fit content */
+  /* Remove box-shadow from here, it's now on .ai-comp-message */
+}
+
+/* Style for the sender's name */
+.ai-comp-message-sender {
+  font-weight: 600;
+  font-size: 0.8em;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+/* Style for the message text */
+.ai-comp-message-text {
+  font-size: 0.95em;
+  color: #222;
+}
+
+/* --- Specific styles for User messages (right side) --- */
+.ai-comp-message-user-side {
+  align-self: flex-end; /* Pushes the entire message block to the right */
+  flex-direction: row-reverse; /* Puts the icon on the right, content on left */
+  margin-left: auto; /* Ensures it pushes completely to the right */
+  background-color: transparent; /* Make outer message transparent, bubble has color */
+  width: fit-content;
+}
+
+.ai-comp-message-user-side .message-content {
+  background-color: #dcf8c6; /* Light green for user text bubble */
+  color: #333;
+  /* Specific border radius for user message to have a 'tail' effect */
+  border-bottom-right-radius: 5px;
+  margin-right: 8px; /* Space between text bubble and icon */
+  width: fit-content;
+}
+
+.ai-comp-message-user-side .ai-comp-message-sender {
+  color: #2e7d32;
+  text-align: right;
+  width: 100%;
+}
+
+.ai-comp-message-user-side .ai-message-icon {
+  color: #2e7d32; /* User icon color */
+  /* background-color: #e6ffe6; A lighter background for the user icon circle if desired */
+}
+
+
+/* --- Specific styles for AI messages (left side) --- */
+.ai-comp-message-ai-side {
+  align-self: flex-start; /* Pushes the entire message block to the left */
+  flex-direction: row; /* Puts the icon on the left, content on right */
+  margin-right: auto; /* Ensures it pushes completely to the left */
+  background-color: transparent; /* Make outer message transparent, bubble has color */
+}
+
+.ai-comp-message-ai-side .message-content {
+  background-color: #ffffff; /* White background for AI text bubble */
+  color: #333;
+  border: 1px solid #e0e0e0; /* A thin border for AI text bubble */
+  /* Specific border radius for AI message to have a 'tail' effect */
+  border-bottom-left-radius: 5px;
+  margin-left: 8px; /* Space between icon and text bubble */
+}
+
+.ai-comp-message-ai-side .ai-comp-message-sender {
+  color: #546e7a;
+  text-align: left;
+  width: 100%;
+}
+
+.ai-comp-message-ai-side .ai-message-icon {
+  color: #546e7a; /* AI icon color */
+}
+/* --- Chat Footer (Input and Button) --- */
 .ai-comp-footer {
   display: flex;
-  padding: 10px;
-  gap: 8px;
+  padding: 12px; /* More padding */
+  gap: 10px; /* More space between input and button */
   background-color: #ffffff;
   border-top: 1px solid #dee2e6;
+  border-bottom-left-radius: 11px; /* Match container border-radius */
+  border-bottom-right-radius: 11px; /* Match container border-radius */
 }
 
 .ai-comp-footer input {
   flex: 1;
-  height: 32px;
-  padding: 0 10px;
-  border-radius: 6px;
+  height: 38px; /* Taller input */
+  padding: 0 14px;
+  border-radius: 20px; /* Pill-shaped input */
   border: 1px solid #ced4da;
-  font-size: 14px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ai-comp-footer input:focus {
+  border-color: #007bff; /* Highlight on focus */
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .ai-comp-footer button {
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 6px;
+  height: 38px; /* Taller button */
+  width: 40px; /* Fixed width for a circle button */
+  border-radius: 50%; /* Make it circular */
   border: none;
-  background-color: #007bff;
+  background-color: #007bff; /* Primary blue for send button */
   color: white;
-  font-size: 14px;
+  font-size: 18px; /* Larger icon */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.ai-comp-footer button:hover {
+  background-color: #0056b3;
+}
+
+.ai-comp-footer button:active {
+  transform: translateY(1px);
+}
+
+.ai-comp-footer button:disabled {
+  background-color: #a8d4ff; /* Lighter blue when disabled */
+  cursor: not-allowed;
+  opacity: 0.6;
 }
