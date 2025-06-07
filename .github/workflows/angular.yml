@@ -25,6 +25,8 @@ jobs:
 
     - name: Run tests
       run: npm test -- --watch=false --browsers=ChromeHeadless
+    - name: Install angular-cli-ghpages
+      run: npm install -g angular-cli-ghpages
 
     - name: Build Angular app
       run: npm run build 
